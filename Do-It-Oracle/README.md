@@ -1,54 +1,38 @@
-select * 
-from emp E
-    ,dept D 
-where e.deptno = d.deptno 
-  AND SAL <= 2500
-  AND E.empno <= 9999 
-ORDER BY SAL;
+# 인덱스
+
+> 해당 Table의 칼럼을 색인화 하여, 테이블 검색시 레코드를 FullScan하는것이 아닌 Index파일을 검색하는 방식.
+> Index는 트리구조로 색인화 하며,B-Tree 구조를 사용함(
+
+- 사용자가 직접 인덱스 열을 지정할 수 있고, 기본키 또는 고유키일 경우 자동으로 인덱스 생성함.
 
 
+1.  INDEX 장점
+- 테이블 검색속도 향상( O(1) )
+- 정렬된 상태로 저장되기 때문에 따로 정렬할 필요가 없음.
+- 
+
+2.  INDEX 단점
+- 인덱스된 필드에 데이터를 변경시, 성능이 크게 떨어짐(연관된 인덱스들을 다시 색인화 해야함)
+- 병행성이 줄어든다. (한 페이지에 대해서 인덱스에 대한 접근 및 수정이 제한됨)
+- 
 
 
-
-select * 
-from emp E
-    ,dept D 
-where SAL <= 2500
-  AND E.empno <= 9999 
-ORDER BY SAL;
-
-SELECT * FROM EMP A, SALGRADE B
-WHERE A.SAL < B.hisal
-AND A.SAL > B.losal
-ORDER BY A.SAL; 
+3. 인덱스의 특징
+- 인덱스는 열단위로 생성된다.
+- 데이터 중복도가 높은 열은 인덱스로 만들어도 소용없다.(?)
+- 외래키가 사용되는 열에는 인덱스를 생성 해주는것이 좋다.
+- JOIN에 자주 사용되는 열,테이블에는 인덱스를 생성해주는것이 좋다.
+- 
+- 
 
 
-SELECT A.empno, A.ENAME, A.MGR, b.empno, b.ename
-FROM EMP A, EMP B
-WHERE A.mgr = B.empno(+);
+- 인덱스 생성
+```
+CREATE INDEX IDX_EMP_SAL
+    ON EMP(SAL);
+```
 
-
-select * fROm all_tab_columns where table_name = 'EMP';
-
-select * from EMP where ename = 'KING';
-
-
-
-SELECT * FROM ALL_TAB_COLUMNS 
-WHERE COLUMN_NAME LIKE '%SAL%';
-
-
-SELECT * FROM sdo_coord_op_param_use;
-
-
-
-
-SELECT * FROM (
-SELECT * FROM ALL_TAB_COLUMNS 
-WHERE COLUMN_NAME LIKE '%SAL%')
-WHERE OWNER = 'SYS';
-
-
-
-
-SELECT * FROM SALGRADE;
+- 인덱스 조회
+```
+SELECT * FROM USER_IND_COLUMNS;
+```
